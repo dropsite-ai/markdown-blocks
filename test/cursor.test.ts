@@ -40,7 +40,17 @@ describe('getCursorTagMatch', () => {
     expect(token).toEqual({ type: 'doc', name: 'intro' });
   });
 
-  it('returns correct result when cursor is at tag boundary', () => {
+  it('returns correct result when cursor is at beginning tag boundary', () => {
+    const input = 'ai:title-case and more text';
+    const cursorIndex = 0;
+    const result = getCursorTagMatch(input, cursorIndex, supportedTypes);
+
+    expect(result.keywordIndex).not.toBeNull();
+    const token = result.blocks[result.keywordIndex!];
+    expect(token).toEqual({ type: 'ai', name: 'title-case' });
+  });
+
+  it('returns correct result when cursor is at end tag boundary', () => {
     const input = 'ai:title-case and more text';
     const cursorIndex = input.indexOf('ai:title-case') + 'ai:title-case'.length;
     const result = getCursorTagMatch(input, cursorIndex, supportedTypes);
