@@ -63,6 +63,27 @@ var:          # missing name
 ai:some@thing # invalid character in name
 ```
 
+## 🔍 Detecting Tag Under Cursor
+
+Need to know if a user’s cursor is inside a tag (like `var:user_name`) in a `<textarea>`? Use `getCursorTagMatchFromTextarea`:
+
+```ts
+import { getCursorTagMatchFromTextarea } from '@dropsite/markdown-blocks';
+
+const result = getCursorTagMatchFromTextarea(textareaElement, ['var', 'ai']);
+
+if (result.keywordIndex !== null) {
+  const tag = result.blocks[result.keywordIndex];
+  console.log('Cursor is inside tag:', tag);
+}
+```
+
+This returns:
+- `blocks`: the parsed result from `createTagParser`
+- `keywordIndex`: the index of the tag the cursor is inside (or `null`)
+
+Perfect for smart editors, autocomplete, and inline tag awareness.
+
 ## 🧪 Testing
 
 ```bash
