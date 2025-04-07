@@ -41,8 +41,32 @@ describe('getCursorTagMatch', () => {
   });
 
   it('returns correct result when cursor is at beginning tag boundary', () => {
+    const input = 'test ai:title-case and more text';
+    const supportedTypes = ['ai', 'var', 'doc']; // ✅ Ensure this
+    const cursorIndex = input.indexOf('ai:title-case');
+    
+    const result = getCursorTagMatch(input, cursorIndex, supportedTypes);
+  
+    expect(result.keywordIndex).not.toBeNull();
+    const token = result.blocks[result.keywordIndex!];
+    expect(token).toEqual({ type: 'ai', name: 'title-case' });
+  });
+
+  it('returns correct result when cursor is at beginning tag boundary at start', () => {
     const input = 'ai:title-case and more text';
-    const cursorIndex = 0;
+    const supportedTypes = ['ai', 'var', 'doc']; // ✅ Ensure this
+    const cursorIndex = input.indexOf('ai:title-case');
+    
+    const result = getCursorTagMatch(input, cursorIndex, supportedTypes);
+  
+    expect(result.keywordIndex).not.toBeNull();
+    const token = result.blocks[result.keywordIndex!];
+    expect(token).toEqual({ type: 'ai', name: 'title-case' });
+  });
+
+  it('returns correct result when cursor is at end tag boundary', () => {
+    const input = 'test ai:title-case and more text';
+    const cursorIndex = input.indexOf('ai:title-case') + 'ai:title-case'.length;
     const result = getCursorTagMatch(input, cursorIndex, supportedTypes);
 
     expect(result.keywordIndex).not.toBeNull();
@@ -50,8 +74,8 @@ describe('getCursorTagMatch', () => {
     expect(token).toEqual({ type: 'ai', name: 'title-case' });
   });
 
-  it('returns correct result when cursor is at end tag boundary', () => {
-    const input = 'ai:title-case and more text';
+  it('returns correct result when cursor is at end tag boundary at end', () => {
+    const input = 'more text ai:title-case';
     const cursorIndex = input.indexOf('ai:title-case') + 'ai:title-case'.length;
     const result = getCursorTagMatch(input, cursorIndex, supportedTypes);
 
